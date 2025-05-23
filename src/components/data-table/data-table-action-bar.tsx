@@ -1,12 +1,11 @@
 "use client";
 
+import type { Table } from "@tanstack/react-table";
+import { Loader, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import type { Table } from "@tanstack/react-table";
-import { AnimatePresence, motion } from "motion/react";
-import { Loader, X } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -15,6 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 interface DataTableActionBarProps<TData>
   extends React.ComponentProps<typeof motion.div> {
@@ -78,7 +78,7 @@ export function DataTableActionBar<TData>({
           transition={{ duration: 0.2, ease: "easeInOut" }}
           className={cn(
             "fixed inset-x-0 bottom-6 z-50 mx-auto flex w-fit flex-wrap items-center justify-center gap-2 rounded-md border bg-background p-2 text-foreground shadow-sm",
-            className
+            className,
           )}
           {...props}
         >
@@ -86,7 +86,7 @@ export function DataTableActionBar<TData>({
         </motion.div>
       )}
     </AnimatePresence>,
-    container
+    container,
   );
 }
 
@@ -106,7 +106,7 @@ export function DataTableActionBarAction({
       className={cn(
         "gap-1.5 border border-secondary bg-secondary/50 hover:bg-secondary/70 [&>svg]:size-3.5",
         size === "icon" ? "size-7" : "h-7",
-        className
+        className,
       )}
       disabled={disabled || isPending}
       {...props}

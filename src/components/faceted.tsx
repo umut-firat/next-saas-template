@@ -64,7 +64,7 @@ function useFacetedContext(name: string) {
 }
 
 export function Faceted<Multiple extends boolean = false>(
-  props: FacetedProps<Multiple>
+  props: FacetedProps<Multiple>,
 ) {
   const {
     open: openProp,
@@ -87,7 +87,7 @@ export function Faceted<Multiple extends boolean = false>(
       }
       onOpenChangeProp?.(newOpen);
     },
-    [isControlled, onOpenChangeProp]
+    [isControlled, onOpenChangeProp],
   );
 
   const onItemSelect = useCallback(
@@ -110,12 +110,12 @@ export function Faceted<Multiple extends boolean = false>(
         requestAnimationFrame(() => onOpenChange(false));
       }
     },
-    [multiple, value, onValueChange, onOpenChange]
+    [multiple, value, onValueChange, onOpenChange],
   );
 
   const contextValue = useMemo<FacetedContextValue<typeof multiple>>(
     () => ({ value, onItemSelect, multiple }),
-    [value, onItemSelect, multiple]
+    [value, onItemSelect, multiple],
   );
 
   return (
@@ -128,7 +128,7 @@ export function Faceted<Multiple extends boolean = false>(
 }
 
 export function FacetedTrigger(
-  props: React.ComponentProps<typeof PopoverTrigger>
+  props: React.ComponentProps<typeof PopoverTrigger>,
 ) {
   const { className, children, ...triggerProps } = props;
 
@@ -162,7 +162,7 @@ export function FacetedBadgeList(props: FacetedBadgeListProps) {
       const option = options.find((opt) => opt.value === value);
       return option?.label ?? value;
     },
-    [options]
+    [options],
   );
 
   if (!values || values.length === 0) {
@@ -205,7 +205,7 @@ export function FacetedBadgeList(props: FacetedBadgeListProps) {
 }
 
 export function FacetedContent(
-  props: React.ComponentProps<typeof PopoverContent>
+  props: React.ComponentProps<typeof PopoverContent>,
 ) {
   const { className, children, ...contentProps } = props;
 
@@ -215,7 +215,7 @@ export function FacetedContent(
       align="start"
       className={cn(
         "w-[200px] origin-(--radix-popover-content-transform-origin) p-0",
-        className
+        className,
       )}
     >
       <Command>{children}</Command>
@@ -251,7 +251,7 @@ export function FacetedItem(props: FacetedItemProps) {
         context.onItemSelect(currentValue);
       }
     },
-    [onSelect, context.onItemSelect]
+    [onSelect, context.onItemSelect],
   );
 
   return (
@@ -267,7 +267,7 @@ export function FacetedItem(props: FacetedItemProps) {
           "flex size-4 items-center justify-center rounded-sm border border-primary",
           isSelected
             ? "bg-primary text-primary-foreground"
-            : "opacity-50 [&_svg]:invisible"
+            : "opacity-50 [&_svg]:invisible",
         )}
       >
         <Check className="size-4" />

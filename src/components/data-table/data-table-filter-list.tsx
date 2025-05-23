@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-import { parseAsStringEnum, useQueryState } from "nuqs";
 import type { Column, ColumnMeta, Table } from "@tanstack/react-table";
 import {
   CalendarIcon,
@@ -11,23 +9,39 @@ import {
   ListFilter,
   Trash2,
 } from "lucide-react";
+import { parseAsStringEnum, useQueryState } from "nuqs";
+import * as React from "react";
 
+import { dataTableConfig } from "@/components/data-table/config";
+import { DataTableRangeFilter } from "@/components/data-table/data-table-range-filter";
+import { getFiltersStateParser } from "@/components/data-table/parsers";
 import type {
   ExtendedColumnFilter,
   FilterOperator,
   JoinOperator,
 } from "@/components/data-table/types";
-import { cn } from "@/lib/utils";
-import { dataTableConfig } from "@/components/data-table/config";
-import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
 import {
   getDefaultFilterOperator,
   getFilterOperators,
 } from "@/components/data-table/utils";
-import { formatDate } from "@/lib/format";
-import { generateId } from "@/lib/id";
-import { getFiltersStateParser } from "@/components/data-table/parsers";
-import { DataTableRangeFilter } from "@/components/data-table/data-table-range-filter";
+import {
+  Faceted,
+  FacetedBadgeList,
+  FacetedContent,
+  FacetedEmpty,
+  FacetedGroup,
+  FacetedInput,
+  FacetedItem,
+  FacetedList,
+  FacetedTrigger,
+} from "@/components/faceted";
+import {
+  Sortable,
+  SortableContent,
+  SortableItem,
+  SortableItemHandle,
+  SortableOverlay,
+} from "@/components/sortable";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -52,24 +66,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Faceted,
-  FacetedBadgeList,
-  FacetedContent,
-  FacetedEmpty,
-  FacetedGroup,
-  FacetedInput,
-  FacetedItem,
-  FacetedList,
-  FacetedTrigger,
-} from "@/components/data-table/faceted";
-import {
-  Sortable,
-  SortableContent,
-  SortableItem,
-  SortableItemHandle,
-  SortableOverlay,
-} from "@/components/data-table/sortable";
+import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
+import { formatDate } from "@/lib/format";
+import { generateId } from "@/lib/id";
+import { cn } from "@/lib/utils";
 
 const FILTERS_KEY = "filters";
 const JOIN_OPERATOR_KEY = "joinOperator";
@@ -113,7 +113,7 @@ export function DataTableFilterList<TData>({
         clearOnDefault: true,
         shallow,
         throttleMs,
-      })
+      }),
   );
   const debouncedSetFilters = useDebouncedCallback(setFilters, debounceMs);
 
@@ -122,7 +122,7 @@ export function DataTableFilterList<TData>({
     parseAsStringEnum(["and", "or"]).withDefault("and").withOptions({
       clearOnDefault: true,
       shallow,
-    })
+    }),
   );
 
   const onFilterAdd = React.useCallback(() => {
@@ -137,7 +137,7 @@ export function DataTableFilterList<TData>({
         value: "",
         variant: column.columnDef.meta?.variant ?? "text",
         operator: getDefaultFilterOperator(
-          column.columnDef.meta?.variant ?? "text"
+          column.columnDef.meta?.variant ?? "text",
         ),
         filterId: generateId({ length: 8 }),
       },
@@ -147,7 +147,7 @@ export function DataTableFilterList<TData>({
   const onFilterUpdate = React.useCallback(
     (
       filterId: string,
-      updates: Partial<Omit<ExtendedColumnFilter<TData>, "filterId">>
+      updates: Partial<Omit<ExtendedColumnFilter<TData>, "filterId">>,
     ) => {
       debouncedSetFilters((prevFilters) => {
         const updatedFilters = prevFilters.map((filter) => {
@@ -159,20 +159,20 @@ export function DataTableFilterList<TData>({
         return updatedFilters;
       });
     },
-    [debouncedSetFilters]
+    [debouncedSetFilters],
   );
 
   const onFilterRemove = React.useCallback(
     (filterId: string) => {
       const updatedFilters = filters.filter(
-        (filter) => filter.filterId !== filterId
+        (filter) => filter.filterId !== filterId,
       );
       void setFilters(updatedFilters);
       requestAnimationFrame(() => {
         addButtonRef.current?.focus();
       });
     },
-    [filters, setFilters]
+    [filters, setFilters],
   );
 
   const onFiltersReset = React.useCallback(() => {
@@ -223,7 +223,7 @@ export function DataTableFilterList<TData>({
         onFilterRemove(filters[filters.length - 1]?.filterId ?? "");
       }
     },
-    [filters, onFilterRemove]
+    [filters, onFilterRemove],
   );
 
   return (
@@ -261,7 +261,7 @@ export function DataTableFilterList<TData>({
               id={descriptionId}
               className={cn(
                 "text-muted-foreground text-sm",
-                filters.length > 0 && "sr-only"
+                filters.length > 0 && "sr-only",
               )}
             >
               {filters.length > 0
@@ -272,6 +272,7 @@ export function DataTableFilterList<TData>({
           {filters.length > 0 ? (
             <SortableContent asChild>
               <div
+                // biome-ignore lint/a11y/useSemanticElements: TODO: Shadcn Data Table
                 role="list"
                 className="flex max-h-[300px] flex-col gap-2 overflow-y-auto p-1"
               >
@@ -336,7 +337,7 @@ interface DataTableFilterItemProps<TData> {
   columns: Column<TData>[];
   onFilterUpdate: (
     filterId: string,
-    updates: Partial<Omit<ExtendedColumnFilter<TData>, "filterId">>
+    updates: Partial<Omit<ExtendedColumnFilter<TData>, "filterId">>,
   ) => void;
   onFilterRemove: (filterId: string) => void;
 }
@@ -390,12 +391,13 @@ function DataTableFilterItem<TData>({
       showOperatorSelector,
       showValueSelector,
       onFilterRemove,
-    ]
+    ],
   );
 
   return (
     <SortableItem value={filter.filterId} asChild>
       <div
+        // biome-ignore lint/a11y/useSemanticElements: TODO: Shadcn Data Table
         role="listitem"
         id={filterItemId}
         tabIndex={-1}
@@ -438,6 +440,7 @@ function DataTableFilterItem<TData>({
         <Popover open={showFieldSelector} onOpenChange={setShowFieldSelector}>
           <PopoverTrigger asChild>
             <Button
+              // biome-ignore lint/a11y/useSemanticElements: TODO: Shadcn Data Table
               role="combobox"
               aria-controls={fieldListboxId}
               variant="outline"
@@ -470,7 +473,7 @@ function DataTableFilterItem<TData>({
                           id: value as Extract<keyof TData, string>,
                           variant: column.columnDef.meta?.variant ?? "text",
                           operator: getDefaultFilterOperator(
-                            column.columnDef.meta?.variant ?? "text"
+                            column.columnDef.meta?.variant ?? "text",
                           ),
                           value: "",
                         });
@@ -484,7 +487,7 @@ function DataTableFilterItem<TData>({
                       <Check
                         className={cn(
                           "ml-auto",
-                          column.id === filter.id ? "opacity-100" : "opacity-0"
+                          column.id === filter.id ? "opacity-100" : "opacity-0",
                         )}
                       />
                     </CommandItem>
@@ -576,7 +579,7 @@ function onFilterInputRender<TData>({
   columnMeta?: ColumnMeta<TData, unknown>;
   onFilterUpdate: (
     filterId: string,
-    updates: Partial<Omit<ExtendedColumnFilter<TData>, "filterId">>
+    updates: Partial<Omit<ExtendedColumnFilter<TData>, "filterId">>,
   ) => void;
   showValueSelector: boolean;
   setShowValueSelector: (value: boolean) => void;
@@ -679,8 +682,8 @@ function onFilterInputRender<TData>({
           ? filter.value
           : []
         : typeof filter.value === "string"
-        ? filter.value
-        : undefined;
+          ? filter.value
+          : undefined;
 
       return (
         <Faceted
@@ -754,11 +757,11 @@ function onFilterInputRender<TData>({
       const displayValue =
         filter.operator === "isBetween" && dateValue.length === 2
           ? `${formatDate(new Date(Number(dateValue[0])))} - ${formatDate(
-              new Date(Number(dateValue[1]))
+              new Date(Number(dateValue[1])),
             )}`
           : dateValue[0]
-          ? formatDate(new Date(Number(dateValue[0])))
-          : "Pick a date";
+            ? formatDate(new Date(Number(dateValue[0])))
+            : "Pick a date";
 
       return (
         <Popover open={showValueSelector} onOpenChange={setShowValueSelector}>
@@ -771,7 +774,7 @@ function onFilterInputRender<TData>({
               size="sm"
               className={cn(
                 "w-full justify-start rounded text-left font-normal",
-                !filter.value && "text-muted-foreground"
+                !filter.value && "text-muted-foreground",
               )}
             >
               <CalendarIcon />

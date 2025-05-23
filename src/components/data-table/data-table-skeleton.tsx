@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -8,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 interface DataTableSkeletonProps extends React.ComponentProps<"div"> {
   columnCount: number;
@@ -32,7 +32,7 @@ export function DataTableSkeleton({
 }: DataTableSkeletonProps) {
   const cozyCellWidths = Array.from(
     { length: columnCount },
-    (_, index) => cellWidths[index % cellWidths.length] ?? "auto"
+    (_, index) => cellWidths[index % cellWidths.length] ?? "auto",
   );
 
   return (
@@ -44,7 +44,13 @@ export function DataTableSkeleton({
         <div className="flex flex-1 items-center gap-2">
           {filterCount > 0
             ? Array.from({ length: filterCount }).map((_, i) => (
-                <Skeleton key={i} className="h-7 w-[4.5rem] border-dashed" />
+                <Skeleton
+                  key={`skeleton-${
+                    // biome-ignore lint/suspicious/noArrayIndexKey: TODO: Shadcn Data Table
+                    i
+                  }`}
+                  className="h-7 w-[4.5rem] border-dashed"
+                />
               ))
             : null}
         </div>
@@ -56,10 +62,19 @@ export function DataTableSkeleton({
         <Table>
           <TableHeader>
             {Array.from({ length: 1 }).map((_, i) => (
-              <TableRow key={i} className="hover:bg-transparent">
+              <TableRow
+                key={`table-row-${
+                  // biome-ignore lint/suspicious/noArrayIndexKey: TODO: Shadcn Data Table
+                  i
+                }`}
+                className="hover:bg-transparent"
+              >
                 {Array.from({ length: columnCount }).map((_, j) => (
                   <TableHead
-                    key={j}
+                    key={`table-head-${
+                      // biome-ignore lint/suspicious/noArrayIndexKey: TODO: Shadcn Data Table
+                      j
+                    }`}
                     style={{
                       width: cozyCellWidths[j],
                       minWidth: shrinkZero ? cozyCellWidths[j] : "auto",
@@ -73,10 +88,19 @@ export function DataTableSkeleton({
           </TableHeader>
           <TableBody>
             {Array.from({ length: rowCount }).map((_, i) => (
-              <TableRow key={i} className="hover:bg-transparent">
+              <TableRow
+                key={`table-row-${
+                  // biome-ignore lint/suspicious/noArrayIndexKey: TODO: Shadcn Data Table
+                  i
+                }`}
+                className="hover:bg-transparent"
+              >
                 {Array.from({ length: columnCount }).map((_, j) => (
                   <TableCell
-                    key={j}
+                    key={`table-cell-${
+                      // biome-ignore lint/suspicious/noArrayIndexKey: TODO: Shadcn Data Table
+                      j
+                    }`}
                     style={{
                       width: cozyCellWidths[j],
                       minWidth: shrinkZero ? cozyCellWidths[j] : "auto",

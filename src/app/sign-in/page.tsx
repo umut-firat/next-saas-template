@@ -1,20 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import { redirect } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { redirect } from "next/navigation";
+import { useState } from "react";
 
-import { signIn } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { signIn } from "@/lib/auth-client";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -80,7 +80,7 @@ export default function SignIn() {
                   onSuccess: () => {
                     redirect("/dashboard");
                   },
-                }
+                },
               );
             }}
           >

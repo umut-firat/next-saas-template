@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import type { ColumnSort, SortDirection, Table } from "@tanstack/react-table";
 import {
   ArrowDownUp,
@@ -8,8 +7,16 @@ import {
   GripVertical,
   Trash2,
 } from "lucide-react";
+import * as React from "react";
 
-import { cn } from "@/lib/utils";
+import { dataTableConfig } from "@/components/data-table/config";
+import {
+  Sortable,
+  SortableContent,
+  SortableItem,
+  SortableItemHandle,
+  SortableOverlay,
+} from "@/components/sortable";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,14 +39,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Sortable,
-  SortableContent,
-  SortableItem,
-  SortableItemHandle,
-  SortableOverlay,
-} from "@/components/data-table/sortable";
-import { dataTableConfig } from "@/components/data-table/config";
+import { cn } from "@/lib/utils";
 
 const OPEN_MENU_SHORTCUT = "s";
 const REMOVE_SORT_SHORTCUTS = ["backspace", "delete"];
@@ -99,25 +99,25 @@ export function DataTableSortList<TData>({
       onSortingChange((prevSorting) => {
         if (!prevSorting) return prevSorting;
         return prevSorting.map((sort) =>
-          sort.id === sortId ? { ...sort, ...updates } : sort
+          sort.id === sortId ? { ...sort, ...updates } : sort,
         );
       });
     },
-    [onSortingChange]
+    [onSortingChange],
   );
 
   const onSortRemove = React.useCallback(
     (sortId: string) => {
       onSortingChange((prevSorting) =>
-        prevSorting.filter((item) => item.id !== sortId)
+        prevSorting.filter((item) => item.id !== sortId),
       );
     },
-    [onSortingChange]
+    [onSortingChange],
   );
 
   const onSortingReset = React.useCallback(
     () => onSortingChange(table.initialState.sorting),
-    [onSortingChange, table.initialState.sorting]
+    [onSortingChange, table.initialState.sorting],
   );
 
   React.useEffect(() => {
@@ -163,7 +163,7 @@ export function DataTableSortList<TData>({
         onSortingReset();
       }
     },
-    [sorting.length, onSortingReset]
+    [sorting.length, onSortingReset],
   );
 
   return (
@@ -201,7 +201,7 @@ export function DataTableSortList<TData>({
               id={descriptionId}
               className={cn(
                 "text-muted-foreground text-sm",
-                sorting.length > 0 && "sr-only"
+                sorting.length > 0 && "sr-only",
               )}
             >
               {sorting.length > 0
@@ -212,6 +212,7 @@ export function DataTableSortList<TData>({
           {sorting.length > 0 && (
             <SortableContent asChild>
               <div
+                // biome-ignore lint/a11y/useSemanticElements: TODO: Shadcn Data Table
                 role="list"
                 className="flex max-h-[300px] flex-col gap-2 overflow-y-auto p-1"
               >
@@ -307,12 +308,13 @@ function DataTableSortItem({
         onSortRemove(sort.id);
       }
     },
-    [sort.id, showFieldSelector, showDirectionSelector, onSortRemove]
+    [sort.id, showFieldSelector, showDirectionSelector, onSortRemove],
   );
 
   return (
     <SortableItem value={sort.id} asChild>
       <div
+        // biome-ignore lint/a11y/useSemanticElements: TODO: Shadcn Data Table
         role="listitem"
         id={sortItemId}
         tabIndex={-1}
@@ -323,6 +325,7 @@ function DataTableSortItem({
           <PopoverTrigger asChild>
             <Button
               id={fieldTriggerId}
+              // biome-ignore lint/a11y/useSemanticElements: TODO: Shadcn Data Table
               role="combobox"
               aria-controls={fieldListboxId}
               variant="outline"

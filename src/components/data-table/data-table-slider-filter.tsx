@@ -1,10 +1,9 @@
 "use client";
 
-import * as React from "react";
 import type { Column } from "@tanstack/react-table";
 import { PlusCircle, XCircle } from "lucide-react";
+import * as React from "react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +14,7 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
+import { cn } from "@/lib/utils";
 
 interface Range {
   min: number;
@@ -75,8 +75,8 @@ export function DataTableSliderFilter<TData>({
       rangeSize <= 20
         ? 1
         : rangeSize <= 100
-        ? Math.ceil(rangeSize / 20)
-        : Math.ceil(rangeSize / 50);
+          ? Math.ceil(rangeSize / 20)
+          : Math.ceil(rangeSize / 50);
 
     return { min: minValue, max: maxValue, step };
   }, [column, defaultRange]);
@@ -96,7 +96,7 @@ export function DataTableSliderFilter<TData>({
         column.setFilterValue([numValue, range[1]]);
       }
     },
-    [column, min, range]
+    [column, min, range],
   );
 
   const onToInputChange = React.useCallback(
@@ -106,7 +106,7 @@ export function DataTableSliderFilter<TData>({
         column.setFilterValue([range[0], numValue]);
       }
     },
-    [column, max, range]
+    [column, max, range],
   );
 
   const onSliderValueChange = React.useCallback(
@@ -115,7 +115,7 @@ export function DataTableSliderFilter<TData>({
         column.setFilterValue(value);
       }
     },
-    [column]
+    [column],
   );
 
   const onReset = React.useCallback(
@@ -125,7 +125,7 @@ export function DataTableSliderFilter<TData>({
       }
       column.setFilterValue(undefined);
     },
-    [column]
+    [column],
   );
 
   return (
@@ -133,7 +133,9 @@ export function DataTableSliderFilter<TData>({
       <PopoverTrigger asChild>
         <Button variant="outline" size="sm" className="border-dashed">
           {columnFilterValue ? (
+            // biome-ignore lint/a11y/useKeyWithClickEvents: TODO: Shadcn Data Table
             <div
+              // biome-ignore lint/a11y/useSemanticElements: TODO: Shadcn Data Table
               role="button"
               aria-label={`Clear ${title} filter`}
               tabIndex={0}

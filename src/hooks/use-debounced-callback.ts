@@ -4,7 +4,7 @@ import { useCallbackRef } from "@/hooks/use-callback-ref";
 
 export function useDebouncedCallback<T extends (...args: never[]) => unknown>(
   callback: T,
-  delay: number
+  delay: number,
 ) {
   const handleCallback = useCallbackRef(callback);
   const debounceTimerRef = useRef(0);
@@ -15,10 +15,10 @@ export function useDebouncedCallback<T extends (...args: never[]) => unknown>(
 
       debounceTimerRef.current = window.setTimeout(
         () => handleCallback(...args),
-        delay
+        delay,
       );
     },
-    [handleCallback, delay]
+    [handleCallback, delay],
   );
 
   useEffect(() => () => window.clearTimeout(debounceTimerRef.current), []);

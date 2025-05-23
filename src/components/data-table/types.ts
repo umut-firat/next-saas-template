@@ -1,7 +1,7 @@
 import type { ColumnSort, Row, RowData } from "@tanstack/react-table";
 
-import type { FilterItemSchema } from "@/components/data-table/parsers";
 import type { DataTableConfig } from "@/components/data-table/config";
+import type { FilterItemSchema } from "@/components/data-table/parsers";
 
 declare module "@tanstack/react-table" {
   interface ColumnMeta<TData extends RowData, TValue> {

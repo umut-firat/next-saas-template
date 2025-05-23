@@ -1,10 +1,9 @@
 "use client";
 
-import * as React from "react";
 import type { Column } from "@tanstack/react-table";
 import { Check, PlusCircle, XCircle } from "lucide-react";
+import * as React from "react";
 
-import { cn } from "@/lib/utils";
 import type { Option } from "@/components/data-table/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,6 +22,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -41,7 +41,7 @@ export function DataTableFacetedFilter<TData, TValue>({
 
   const columnFilterValue = column?.getFilterValue();
   const selectedValues = new Set(
-    Array.isArray(columnFilterValue) ? columnFilterValue : []
+    Array.isArray(columnFilterValue) ? columnFilterValue : [],
   );
 
   const onItemSelect = React.useCallback(
@@ -62,7 +62,7 @@ export function DataTableFacetedFilter<TData, TValue>({
         setOpen(false);
       }
     },
-    [column, multiple, selectedValues]
+    [column, multiple, selectedValues],
   );
 
   const onReset = React.useCallback(
@@ -70,7 +70,7 @@ export function DataTableFacetedFilter<TData, TValue>({
       event?.stopPropagation();
       column?.setFilterValue(undefined);
     },
-    [column]
+    [column],
   );
 
   return (
@@ -150,7 +150,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                         "flex size-4 items-center justify-center rounded-sm border border-primary",
                         isSelected
                           ? "bg-primary"
-                          : "opacity-50 [&_svg]:invisible"
+                          : "opacity-50 [&_svg]:invisible",
                       )}
                     >
                       <Check />

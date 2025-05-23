@@ -1,10 +1,9 @@
 "use client";
 
-import * as React from "react";
 import type { Table } from "@tanstack/react-table";
 import { Check, ChevronsUpDown, Settings2 } from "lucide-react";
+import * as React from "react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -19,6 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>;
@@ -33,9 +33,9 @@ export function DataTableViewOptions<TData>({
         .getAllColumns()
         .filter(
           (column) =>
-            typeof column.accessorFn !== "undefined" && column.getCanHide()
+            typeof column.accessorFn !== "undefined" && column.getCanHide(),
         ),
-    [table]
+    [table],
   );
 
   return (
@@ -43,6 +43,7 @@ export function DataTableViewOptions<TData>({
       <PopoverTrigger asChild>
         <Button
           aria-label="Toggle columns"
+          // biome-ignore lint/a11y/useSemanticElements: TODO: Shadcn Data Table
           role="combobox"
           variant="outline"
           size="sm"
@@ -72,7 +73,7 @@ export function DataTableViewOptions<TData>({
                   <Check
                     className={cn(
                       "ml-auto size-4 shrink-0",
-                      column.getIsVisible() ? "opacity-100" : "opacity-0"
+                      column.getIsVisible() ? "opacity-100" : "opacity-0",
                     )}
                   />
                 </CommandItem>

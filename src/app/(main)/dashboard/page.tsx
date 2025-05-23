@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 import type { Column, ColumnDef } from "@tanstack/react-table";
 import {
   CheckCircle,
@@ -11,8 +9,12 @@ import {
   Text,
   XCircle,
 } from "lucide-react";
+import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
+import { useMemo } from "react";
 
-import { useDataTable } from "@/hooks/use-data-table";
+import { DataTable } from "@/components/data-table/data-table";
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
+import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -22,9 +24,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DataTable } from "@/components/data-table/data-table";
-import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
-import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
+import { useDataTable } from "@/hooks/use-data-table";
 
 interface Project {
   id: string;
@@ -64,11 +64,11 @@ export default function CasesPage() {
   const [title] = useQueryState("title", parseAsString.withDefault(""));
   const [status] = useQueryState(
     "status",
-    parseAsArrayOf(parseAsString).withDefault([])
+    parseAsArrayOf(parseAsString).withDefault([]),
   );
 
   // Ideally we would filter the data server-side, but for the sake of this example, we'll filter the data client-side
-  const filteredData = React.useMemo(() => {
+  const filteredData = useMemo(() => {
     return data.filter((project) => {
       const matchesTitle =
         title === "" ||
@@ -80,7 +80,7 @@ export default function CasesPage() {
     });
   }, [title, status]);
 
-  const columns = React.useMemo<ColumnDef<Project>[]>(
+  const columns = useMemo<ColumnDef<Project>[]>(
     () => [
       {
         id: "select",
@@ -189,7 +189,7 @@ export default function CasesPage() {
         size: 32,
       },
     ],
-    []
+    [],
   );
 
   const { table } = useDataTable({
